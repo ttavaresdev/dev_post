@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#121212'
+    backgroundColor: '#232630'
   },
   text: {
     color: '#FFF',

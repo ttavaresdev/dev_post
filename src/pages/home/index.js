@@ -1,23 +1,41 @@
 import React from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native'
+
+import {useNavigation}from '@react-navigation/native'
+import{Feather} from '@expo/vector-icons'
 
 export default function Home() {
+  const navigation = useNavigation ();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Home Page!!</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.name}> DevBlog</Text>
+
+        <TouchableOpacity>
+          <Feather name ="search" size={24} color="#FFF"/>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#121212'
+    backgroundColor: '#232630'
   },
-  text: {
+  header:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 18,
+    marginTop: 18,
+    marginBottom: 18
+  },
+  name:{
     color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 25
+    fontSize: 28,
+    fontWeight: 'bold'
+
   }
 })
