@@ -13,10 +13,13 @@ import{Feather} from '@expo/vector-icons'
 import api from '../../services/api'
 
 import CategoryItem from '../../components/CategoryItem'
+import  {getFavorite, setFavorite } from '../../services/favorite'
+import FavoritePost from '../../components/FavoritePost'
 
 export default function Home() {
   const navigation = useNavigation ();
   const [categories, setCategories] = useState([])
+  const [favCategory, setFavCategory] = useState([])
 
   useEffect(() => {
     async function loadData (){
@@ -25,6 +28,19 @@ export default function Home() {
     }
     loadData();
   },[])
+
+  useEffect(() =>{
+    async function favorite(){
+      const response = await getFavorite();
+      setFavCategory(response);
+    }
+    favorite();
+  },[])
+  // Favoritando uma categoria
+  async function handleFavorite (id){
+    const response = await setFavorite(id);
+    setFavCategory(response);
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -45,9 +61,29 @@ export default function Home() {
       renderItem={ ({item}) => (
         <CategoryItem
         data={item}
+        favorite={()=> handleFavorite(item.id)}
         />
         )}
      />
+
+      <View style={styles.main}>
+          {favCategory.length !== 0 && (
+            <FlatList 
+              style ={{ marginTop:50, maxHeight: 100, paddingStart: 18,}}
+              contentContainerStyle={{paddingEnd:25}}
+              data={favCategory}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={ (item) => String(item.id) }
+              renderItem={({item}) => <FavoritePost data={item}/>}
+            />
+
+          )}
+          <Text style={[
+            styles.title,
+            { marginTop: favCategory.length > 0 ? 14 : 35}
+            ]}>Conteúdo em Alta</Text>
+      </View>
 
     </SafeAreaView>
   )
@@ -77,6 +113,23 @@ const styles = StyleSheet.create({
     marginHorizontal:18,
     borderRadius: 8,
     zIndex: 9
+  },
+  main:{
+    flex:1,
+    backgroundColor:'#FFF',
+    marginTop: -30,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    alignItems:'flex-start'
+    
+  },
+  title:{
+    fontSize:21,
+    fontWeight:'bold',
+    marginBottom:14,
+    fontFamily:'Roboto',
+    paddingHorizontal: 18,
+    color:"#162133"
+
   }
-  
 })
